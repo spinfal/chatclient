@@ -167,14 +167,14 @@
       .italics {
         font-style: italic;
       }
-			.bold {
-				font-weight: bold;
-			}
-			.strike {
-				text-decoration: line-through;
-			}
-			.under {
-				text-decoration: underline;
+		  .bold {
+		  	font-weight: bold;
+		  }
+		  .strike {
+		  	text-decoration: line-through;
+		  }
+		  .under {
+		  	text-decoration: underline;
 			}
       input:focus { /* oof */
         outline: none;
@@ -196,19 +196,19 @@
 			}
     </style>
 		<script>
-			// custom code
-			function cuscode() {
-				var value = document.getElementById("custom-id").value
-				if (document.getElementById("custom-id").value == "") {
-					alert("Code cannot be empty.")
-				} else if (value.length <= 5) {
-					alert("Code needs to be 6 letters or longer.")
-				} else {
-					document.title = "creating..."; window.open("https://chatclient.spinfal.repl.co/?chat=" + document.getElementById("custom-id").value, "_self");
-				}
-			}
-			// kinda ghetto but eh :shrug:
-		</script>
+	  	// custom code
+	  	function cuscode() {
+	  		var value = document.getElementById("custom-id" .value
+	  		if (document.getElementById("custom-id").value == "") {
+	  			alert("Code cannot be empty.")
+	  		} else if (value.length <= 5) {
+	  			alert("Code needs to be 6 letters or longer.")
+	  		} else {
+	  			document.title = "creating..."; window.ope  ("https://chatclient.spinfal.repl.co/?chat=" +  document.getElementById("custom-id").value, "_self");
+	  		}
+	  	}
+	  	// kinda ghetto but eh :shrug:
+	  </script>
   </head>
   <body>
 </div>
@@ -486,14 +486,14 @@ async function launchChat(chatGetter) {
               + '/setname [name] - Sets your display name (alias: /nick)\n'
               + '/setcolour [colour name] - Sets your display name colour (aliases: /setcolor, /colour, /color)\n'
               + '/me [message] - Italicizes your message\n'
-							+ '/bold [message] - Makes your message bold\n'
-							+ '/strike [message] - Strikethrough your message\n'
-							+ '/under [message] - Underlines your message\n'
-							+ '/rejoin - Rejoins the current chat\n'
-							+ '/new [room name] - Makes a new chat room for you (alias: /newroom)\n'
-							+ '/tableflip - Sends the tableflip unicode emote\n'
-							+ '/unflip - Sends the un-tableflip unicode emote\n'
-							+ '/shrug - Sends the shrug unicode emote');
+					    + '/bold [message] - Makes your message bold\n'
+					    + '/strike [message] - Strikethrough your message\n'
+					    + '/under [message] - Underlines your message\n'
+					    + '/rejoin - Rejoins the current chat\n'
+					    + '/new [room name] - Makes a new chat room for you (alias: /newroom)\n'
+					    + '/tableflip - Sends the tableflip unicode emote\n'
+					    + '/unflip - Sends the un-tableflip unicode emote\n'
+					    + '/shrug - Sends the shrug unicode emote');
             break;
           }
           case 'setname': case 'nick': {
@@ -516,31 +516,31 @@ async function launchChat(chatGetter) {
             break;
           }
           case 'rejoin': {
-						selfPost('Rejoining...');
-						document.title = "rejoining chat...";
+		  			selfPost('Rejoining...');
+		  			document.title = "rejoining chat...";
             window.location.reload();
             break;
-					}
+		  		}
           case 'new': case 'newroom': {
-						roomName = msg.slice(1 + command.length + 1);
-						if (roomName.length <= 5) {
-							selfPost('Room names must be 6 letters or more.');
-						} else {
-							selfPost('Making new room...');
-						  document.title = "joining new room...";
+		  			roomName = msg.slice(1 + command.length + 1);
+		  			if (roomName.length <= 5) {
+		  				selfPost('Room names must be 6 letters or more.');
+		  			} else {
+		  				selfPost('Making new room...');
+		  			  document.title = "joining new room...";
               window.open("?chat=" + roomName, "_self");
               break;
-						}
-						break;
+		  			}
+		  			break;
           }
           case 'tableflip': {
             obj.send("(╯°□°)╯︵ ┻━┻");
             break;
           }
-					case'unflip': {
-						obj.send("┬─┬ノ( º _ ºノ)")
-						break;
-					}
+		  		case'unflip': {
+		  			obj.send("┬─┬ノ( º _ ºノ)")
+		  			break;
+		  		}
           case 'shrug': {
             obj.send("¯\\_(ツ)_/¯");
             break;
