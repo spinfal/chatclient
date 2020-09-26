@@ -1,13 +1,11 @@
-
-
 <!DOCTYPE html>
-<html lang="en" oncontextmenu="return false">
+<html lang="en">
   <head>
     <title>anonymous chat thing</title>
     <meta charset="UTF-8">
     <meta name="description" content="chat without authentication"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <script src="https://cdn.jsdelivr.net/npm/peerjs@0.3.20/dist/peer.min.js" charset="utf-8"></script>
+		<script src="https://cdn.jsdelivr.net/npm/peerjs@0.3.20/dist/peer.min.js" charset="utf-8"></script>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <style>
       html, body {
@@ -40,6 +38,9 @@
       .join {
         --colour: #6295bd;
       }
+      .custom {
+        --colour: #AE00FF;
+			}
       .line {
         background-color: rgba(0, 0, 0, 0.1);
         margin: 0 50px;
@@ -166,6 +167,15 @@
       .italics {
         font-style: italic;
       }
+			.bold {
+				font-weight: bold;
+			}
+			.strike {
+				text-decoration: line-through;
+			}
+			.under {
+				text-decoration: underline;
+			}
       input:focus { /* oof */
         outline: none;
       }
@@ -181,15 +191,40 @@
         margin-left: 10px;
         cursor: pointer;
       }
+			sub {
+				font-size: 15px;
+			}
     </style>
+		<script>
+			// custom code
+			function cuscode() {
+				var value = document.getElementById("custom-id").value
+				if (document.getElementById("custom-id").value == "") {
+					alert("Code cannot be empty.")
+				} else if (value.length <= 5) {
+					alert("Code needs to be 6 letters or longer.")
+				} else {
+					document.title = "creating..."; window.open("https://chatclient.spinfal.repl.co/?chat=" + document.getElementById("custom-id").value, "_self");
+				}
+			}
+			// kinda ghetto but eh :shrug:
+		</script>
   </head>
   <body>
+</div>
     <div class="welcome">
       <div class="side create">
         <h1>create a chat</h1>
         <button class="button" id="create">create</button>
       </div>
       <div class="line"></div>
+      <div class="side custom">
+      	<h1>custom chat code</h1>
+      	<div><input type="text" placeholder="custom ID" id="custom-id" class="input" maxlength="30"></div>
+				<button class="button" id="custom" onclick="cuscode()">create</button>
+				<sub>Code must be 6 <font color="red">letters</font> or more.</sub>
+      </div>
+			<div class="line"></div>
       <div class="side join">
         <h1>join a chat</h1>
         <div><input type="text" placeholder="chat ID" id="join-id" class="input"></div>
@@ -197,6 +232,7 @@
         <p class="error hidden" id="id-error"></p>
       </div>
     </div>
+		<br><br>
     <div class="chat" id="chat"></div>
     <input type="text" placeholder="send a message" id="message" disabled>
     <script>
@@ -402,7 +438,7 @@ const nameColours = {
   teal: '#1abc9c', green: '#2ecc71', blue: '#3498db', purple: '#9b59b6',
   yellow: '#f1c40f', orange: '#e67e22', red: '#e74c3c', white: '#ecf0f1',
   grey: '#95a5a6', gray: '#95a5a6', black: '#34495e'
-};
+	};
 async function launchChat(chatGetter) {
   document.body.classList.add('chat-mode');
   let messages, userData;
@@ -426,7 +462,15 @@ async function launchChat(chatGetter) {
     const contentSpan = document.createElement('span');
     contentSpan.classList.add('content');
     contentSpan.textContent = decodeURIComponent(content);
-    if (data.italics) contentSpan.classList.add('italics');
+    if (data.italics) {
+			contentSpan.classList.add('italics');
+		} else if (data.bold) {
+			contentSpan.classList.add('bold');
+		} else if (data.strike) {
+			contentSpan.classList.add('strike');
+		} else if (data.under) {
+			contentSpan.classList.add('under');
+		}
     message.appendChild(contentSpan);
     return message;
   }
@@ -440,8 +484,16 @@ async function launchChat(chatGetter) {
             selfPost('/help - List of commands\n'
               + '//[rest of message] - Sends the message beginning with a single slash (escapes the command)\n'
               + '/setname [name] - Sets your display name (alias: /nick)\n'
-              + '/setcolour [colour name] - Sets your display name colour (aliases: /setcolor, /colour)\n'
-              + '/me [message] - Italicizes your message');
+              + '/setcolour [colour name] - Sets your display name colour (aliases: /setcolor, /colour, /color)\n'
+              + '/me [message] - Italicizes your message\n'
+							+ '/bold [message] - Makes your message bold\n'
+							+ '/strike [message] - Strikethrough your message\n'
+							+ '/under [message] - Underlines your message\n'
+							+ '/rejoin - Rejoins the current chat\n'
+							+ '/new [room name] - Makes a new chat room for you (alias: /newroom)\n'
+							+ '/tableflip - Sends the tableflip unicode emote\n'
+							+ '/unflip - Sends the un-tableflip unicode emote\n'
+							+ '/shrug - Sends the shrug unicode emote');
             break;
           }
           case 'setname': case 'nick': {
@@ -454,7 +506,7 @@ async function launchChat(chatGetter) {
             else obj.setName(name);
             break;
           }
-          case 'setcolour': case 'setcolor': case 'colour': {
+          case 'setcolour': case 'setcolor': case 'colour': case 'color': {
             const colour = msg.slice(1 + command.length + 1);
             if (nameColours[colour]) {
               obj.setColour(nameColours[colour]);
@@ -463,10 +515,61 @@ async function launchChat(chatGetter) {
             else selfPost('Colours: ' + Object.keys(nameColours).join(', '));
             break;
           }
+          case 'rejoin': {
+						selfPost('Rejoining...');
+						document.title = "rejoining chat...";
+            window.location.reload();
+            break;
+					}
+          case 'new': case 'newroom': {
+						roomName = msg.slice(1 + command.length + 1);
+						if (roomName.length <= 5) {
+							selfPost('Room names must be 6 letters or more.');
+						} else {
+							selfPost('Making new room...');
+						  document.title = "joining new room...";
+              window.open("?chat=" + roomName, "_self");
+              break;
+						}
+						break;
+          }
+          case 'tableflip': {
+            obj.send("(╯°□°)╯︵ ┻━┻");
+            break;
+          }
+					case'unflip': {
+						obj.send("┬─┬ノ( º _ ºノ)")
+						break;
+					}
+          case 'shrug': {
+            obj.send("¯\\_(ツ)_/¯");
+            break;
+          }
           case 'me': {
             const message = msg.slice(1 + command.length + 1);
             if (message) {
               obj.send(message, {italics: true});
+            }
+            break;
+          }
+          case 'bold': {
+            const message = msg.slice(1 + command.length + 1);
+            if (message) {
+              obj.send(message, {bold: true});
+            }
+            break;
+          }
+          case 'strike': {
+            const message = msg.slice(1 + command.length + 1);
+            if (message) {
+              obj.send(message, {strike: true});
+            }
+            break;
+          }
+          case 'under': {
+            const message = msg.slice(1 + command.length + 1);
+            if (message) {
+              obj.send(message, {under: true});
             }
             break;
           }
