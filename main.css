@@ -182,3 +182,14 @@
     sub {
       font-size: 15px;
     }
+    /* footer taken from https://www.w3schools.com/howto/howto_css_fixed_footer.asp becasue i am a lazy shit */
+    .footer {
+       position: fixed;
+       left: 0;
+       bottom: 0;
+       width: 100%;
+       background-color: #eee;
+       color: black;
+       text-align: center;
+       cursor: help;
+    }
