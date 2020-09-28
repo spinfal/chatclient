@@ -26,10 +26,10 @@ function randomWord(syllables = 3, nasalChances = 0.3) {
   return word;
 }
 
-const SHEEP_PREFIX = 'spin-';
+const SPIN_PREFIX = 'spin-';
 function createChat(on = {}, id = randomWord(), messages = [], userData = {}) {
   return new Promise((res, rej) => {
-    const peer = new Peer(SHEEP_PREFIX + id);
+    const peer = new Peer(SPIN_PREFIX + id);
     const members = []; // list of connections
     if (!userData[peer.id]) userData[peer.id] = {colour: '#ffffff', name: randomWord()};
     function broadcast(msg) {
@@ -171,7 +171,7 @@ function joinChat(id, on = {}) {
       if (wasClosed && on.reopen) on.reopen();
     }
     peer.on('open', () => {
-      const conn = peer.connect(SHEEP_PREFIX + id);
+      const conn = peer.connect(SPIN_PREFIX + id);
       treatConnection(conn);
       conn.on('open', () => {
         res(obj);
@@ -185,6 +185,7 @@ function joinChat(id, on = {}) {
 
 const chat = document.getElementById('chat');
 const messageInput = document.getElementById('message');
+const chatPage = document.getElementById('chat');
 let onsubmit = null;
 messageInput.addEventListener('keydown', e => {
   const trueValue = messageInput.value.trim();
@@ -398,7 +399,7 @@ async function launchChat(chatGetter) {
       content: encodeURIComponent(`Host transferred to ${userData[obj.myID].name}.`),
       time: Date.now()
     });
-    const newID = SHEEP_PREFIX + obj.id;
+    const newID = SPIN_PREFIX + obj.id;
     userDataClone[newID] = userDataClone[obj.myID];
     delete userDataClone[obj.myID];
     messagesClone.forEach(msg => {
@@ -461,3 +462,17 @@ if (params.get('chat')) {
         });
   }
 }
+
+/*
+// load chat without showing params
+function hideP() {
+  const nextURL = 'https://chatclient.spinfal.repl.co/';
+  const nextTitle = 'anonymous chat thing';
+  const nextState = { additionalInformation: 'loaded chat' };
+  
+  // this will create a new entry in the browser's history, without reloading
+  window.history.pushState(nextState, nextTitle, nextURL);
+  // this will replace the current entry in the browser's history, without reloading
+  window.history.replaceState(nextState, nextTitle, nextURL);
+}
+*/
