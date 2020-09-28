@@ -287,13 +287,13 @@ async function launchChat(chatGetter) {
             const colour = msg.slice(1 + command.length + 1);
             if (nameColours[colour]) {
               obj.setColour(nameColours[colour]);
-              selfPost('Name colour set to ' + colour);
+              selfPost('name colour set to ' + colour);
             }
             else selfPost('Colours: ' + Object.keys(nameColours).join(', '));
             break;
           }
           case 'rejoin': {
-		  			selfPost('Rejoining...');
+		  			selfPost('rejoining...');
 		  			document.title = "rejoining chat...";
             window.location.reload();
             break;
@@ -301,9 +301,9 @@ async function launchChat(chatGetter) {
           case 'new': case 'newroom': {
 		  			roomName = msg.slice(1 + command.length + 1);
 		  			if (roomName.length <= 5) {
-		  				selfPost('Room names must be 6 letters or more.');
+		  				selfPost('room names must be 6 letters or more.');
 		  			} else {
-		  				selfPost('Making new room...');
+		  				selfPost('making new room...');
 		  			  document.title = "joining new room...";
               window.open("?chat=" + roomName, "_self");
               break;
@@ -351,7 +351,7 @@ async function launchChat(chatGetter) {
             break;
           }
           default:
-            selfPost('Unknown command. (use a double slash to escape a command)');
+            selfPost('unknown command. (use a double slash to escape a command)');
         }
       }
     } else {
@@ -386,17 +386,17 @@ async function launchChat(chatGetter) {
   hostClosedMessage.classList.add('message');
   const hostClosedContent = document.createElement('span');
   hostClosedContent.classList.add('content');
-  hostClosedContent.textContent = 'Seems the host of the chat has gone offline. Take over?';
+  hostClosedContent.textContent = 'seems the host of the chat has gone offline. take over?';
   hostClosedMessage.appendChild(hostClosedContent);
   const hostClosedBtn = document.createElement('button');
   hostClosedBtn.classList.add('chat-btn');
-  hostClosedBtn.textContent = 'Sure';
+  hostClosedBtn.textContent = 'sure';
   hostClosedBtn.addEventListener('click', e => {
     const messagesClone = JSON.parse(JSON.stringify(messages));
     const userDataClone = JSON.parse(JSON.stringify(userData));
     messagesClone.push({
       type: 'announcement',
-      content: encodeURIComponent(`Host transferred to ${userData[obj.myID].name}.`),
+      content: encodeURIComponent(`host transferred to ${userData[obj.myID].name}.`),
       time: Date.now()
     });
     const newID = SPIN_PREFIX + obj.id;
@@ -409,7 +409,7 @@ async function launchChat(chatGetter) {
     launchChat(listeners => createChat(listeners, obj.id, messagesClone, userDataClone))
       .catch(err => {
         console.log(err);
-        selfPost('There was a problem taking over.');
+        selfPost('there was a problem taking over.');
       });
     obj.destroy();
   });
@@ -438,14 +438,14 @@ document.getElementById('join').addEventListener('click', e => {
   if (idRegex.test(id))
     launchChat(listeners => joinChat(id, listeners))
       .catch(err => {
-        idError.textContent = 'Problem connecting to room.';
+        idError.textContent = 'problem connecting to room.';
         idError.classList.remove('hidden');
         document.body.classList.remove('chat-mode');
         window.history.pushState({}, '', window.location.pathname);
         console.log(err);
       });
   else {
-    idError.textContent = 'That doesn\'t look like a chat ID.';
+    idError.textContent = 'that doesn\'t look like a chat ID.';
     idError.classList.remove('hidden');
   }
 });
