@@ -463,6 +463,12 @@ if (params.get('chat')) {
   }
 }
 
+// reload or leave warning
+window.onbeforeunload = function() {
+   return "reloading or leaving this page may clear or disconnect your current chat";
+   //return;
+};
+
 /*
 // load chat without showing params
 function hideP() {
