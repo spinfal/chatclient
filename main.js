@@ -8,8 +8,15 @@ function cuscode() {
 	} else {
 	  document.title = "creating..."; window.open("https://chatclient.spinfal.repl.co/?chat=" +  document.getElementById("custom-id").value, "_self");
 	}
-}
+};
 // kinda ghetto but eh :shrug:
+
+function report() {
+  if (window.confirm('before reporting an issue, make sure you have attempted to join a chat multiple times, at least'))
+{
+  window.open("https://waa.ai/report", "_blank");
+  }
+};
 
 // main js
 const consonants = 'bdfghjklmnprstvwz';
@@ -468,17 +475,3 @@ window.onbeforeunload = function() {
    return "reloading or leaving this page may clear or disconnect your current chat";
    //return;
 };
-
-/*
-// load chat without showing params
-function hideP() {
-  const nextURL = 'https://chatclient.spinfal.repl.co/';
-  const nextTitle = 'anonymous chat thing';
-  const nextState = { additionalInformation: 'loaded chat' };
-  
-  // this will create a new entry in the browser's history, without reloading
-  window.history.pushState(nextState, nextTitle, nextURL);
-  // this will replace the current entry in the browser's history, without reloading
-  window.history.replaceState(nextState, nextTitle, nextURL);
-}
-*/

@@ -182,6 +182,9 @@
     sub {
       font-size: 15px;
     }
+    .cursor {
+      cursor: pointer;
+    }
     /* footer taken from https://www.w3schools.com/howto/howto_css_fixed_footer.asp becasue i am a lazy shit */
     .footer {
        position: fixed;
