@@ -11,6 +11,11 @@ function cuscode() {
 };
 // kinda ghetto but eh :shrug:
 
+// focus on page hide/show
+document.addEventListener("visibilitychange", onchange => {
+  document.getElementById('message').focus();
+});
+
 function report() {
   if (window.confirm('before reporting an issue, make sure you have attempted to join a chat multiple times, at least'))
 {
