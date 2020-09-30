@@ -55,6 +55,7 @@ function createChat(on = {}, id = randomWord(), messages = [], userData = {}) {
           messages.push(msgObj);
           broadcast({type: 'new-message', message: msgObj});
           if (on.message) on.message(msgObj);
+	  document.getElementById('message').focus();
           break;
         }
         case 'set-colour': {
