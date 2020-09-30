@@ -222,7 +222,7 @@ const illegalNameCharsRegex = /[^a-z ]/i;
 const nameColours = {
   teal: '#1abc9c', green: '#2ecc71', blue: '#3498db', purple: '#9b59b6',
   yellow: '#f1c40f', orange: '#e67e22', red: '#e74c3c', white: '#ecf0f1',
-  grey: '#95a5a6', gray: '#95a5a6', black: '#34495e'
+  grey: '#95a5a6', gray: '#95a5a6', black: '#34495e', pink: '#ff008f'
 	};
 async function launchChat(chatGetter) {
   document.body.classList.add('chat-mode');
