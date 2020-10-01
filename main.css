@@ -124,6 +124,14 @@
     }
     #message:disabled {
       opacity: 0.5;
+      user-select: none;
+      -moz-user-select: none;
+      -webkit-user-select: none;
+    }
+    #message {
+      user-select: none;
+      -moz-user-select: none;
+      -webkit-user-select: none;
     }
     .message {
       margin: 0 20px;
