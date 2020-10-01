@@ -133,6 +133,21 @@
       -moz-user-select: none;
       -webkit-user-select: none;
     }
+    #message:hover {
+      -webkit-box-shadow: 0px 0px 30px -9px rgba(0,0,0,0.479);
+      -moz-box-shadow: 0px 0px 30px -9px rgba(0,0,0,0.479);
+      box-shadow: 0px 0px 30px -9px rgba(0,0,0,0.479);
+      transition: 0.3s;
+    }
+    #message:focus {
+      -webkit-box-shadow: 0px 0px 20px -10px rgba(0,0,0,0.510);
+      -moz-box-shadow: 0px 0px 20px -10px rgba(0,0,0,0.510);
+      box-shadow: 0px 0px 20px -10px rgba(0,0,0,0.510);
+      transition: 0.2s;
+    }
+    #message:not(:hover), #message:not(:focus) {
+      transition: 0.3s;
+    }
     .message {
       margin: 0 20px;
       margin-top: 10px;
