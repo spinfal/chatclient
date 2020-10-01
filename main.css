@@ -151,6 +151,10 @@
     }
     .content {
       white-space: pre-wrap;
+      opacity: 1;
+    }
+    .content:hover ~ .timeData {
+      opacity: 1;
     }
     .italics {
       font-style: italic;
@@ -181,6 +185,25 @@
     }
     sub {
       font-size: 15px;
+    }
+    .timeData {
+      position: absolute;
+      font-size: 10px;
+      display: inline;
+      margin-left: 35px;
+      color: darkgray;
+      opacity: 0;
+    }
+    .timeData:hover {
+      opacity: 0.8;
+      transition: 0.3s;
+    }
+    .timeData:not(:hover) {
+      opacity: 0;
+      transition: 0.3s;
+    }
+    .timeDiv {
+      display: inline;
     }
     .cursor {
       cursor: pointer;
