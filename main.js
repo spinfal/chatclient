@@ -2,9 +2,9 @@
 function cuscode() {
 	var value = document.getElementById("custom-id").value;
 	if (document.getElementById("custom-id").value == "") {
-	  alert("Code cannot be empty.")
+	  alert("Code cannot be empty.");
 	} else if (value.length <= 5) {
-	  alert("Code needs to be 6 letters or longer.")
+	  alert("Code needs to be 6 letters or longer.");
 	} else {
 	  document.title = "creating..."; window.open("https://chatclient.spinfal.repl.co/?chat=" +  document.getElementById("custom-id").value, "_self");
 	}
@@ -15,6 +15,8 @@ function cuscode() {
 document.addEventListener("visibilitychange", onchange => {
   document.getElementById('message').focus();
 });
+
+/* img inputload https://stackoverflow.com/questions/49201299/save-and-load-image-from-input/49202085 */
 
 function report() {
   if (window.confirm('before reporting an issue, make sure you have attempted to join a chat multiple times, at least'))
@@ -57,10 +59,11 @@ function createChat(on = {}, id = randomWord(), messages = [], userData = {}) {
       switch (data.type) {
         case 'new-message': {
           const msgObj = {type: 'message', content: data.content, author: peerID, time: data.time, data: data.data};
+          //  msgtime = "  " + "(" + new Date().toLocaleTimeString() + ")"
           messages.push(msgObj);
           broadcast({type: 'new-message', message: msgObj});
           if (on.message) on.message(msgObj);
-	  document.getElementById('message').focus();
+          document.getElementById('message').focus();
           break;
         }
         case 'set-colour': {
@@ -243,7 +246,7 @@ async function launchChat(chatGetter) {
       authorSpan.textContent = userData[author] ? userData[author].name : '[deleted user]';
       if (userData[author]) authorSpan.style.color = userData[author].colour;
       message.appendChild(authorSpan);
-      message.appendChild(document.createTextNode(': '));
+      message.appendChild(document.createTextNode('  '));
     } else if (type === 'announcement') {
       message.classList.add('announcement');
     } else if (type === 'self-message') {
@@ -252,6 +255,12 @@ async function launchChat(chatGetter) {
     const contentSpan = document.createElement('span');
     contentSpan.classList.add('content');
     contentSpan.textContent = decodeURIComponent(content);
+    const timeDiv = document.createElement('div');
+    const timeSet = document.createElement('p');
+    timeSet.classList.add('timeData');
+    timeDiv.classList.add('timeDiv');
+    //timeSet.classList.add('content');
+    const timeData = document.createTextNode(new Date().toLocaleTimeString());
     if (data.italics) {
 			contentSpan.classList.add('italics');
 		} else if (data.bold) {
@@ -262,6 +271,10 @@ async function launchChat(chatGetter) {
 			contentSpan.classList.add('under');
 		}
     message.appendChild(contentSpan);
+    timeSet.appendChild(timeDiv);
+    timeSet.appendChild(timeData);
+    message.appendChild(timeSet);
+    // new Date().toLocaleTimeString()
     return message;
   }
   function submitHandler(msg) {
