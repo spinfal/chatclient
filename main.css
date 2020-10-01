@@ -193,6 +193,10 @@
       margin-left: 35px;
       color: darkgray;
       opacity: 0;
+      cursor: default;
+      user-select: none;
+      -moz-user-select: none;
+      -webkit-user-select: none;
     }
     .timeData:hover {
       opacity: 0.8;
