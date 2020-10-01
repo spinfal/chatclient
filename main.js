@@ -10,14 +10,23 @@ function cuscode() {
 	}
 };
 // kinda ghetto but eh :shrug:
-
+var msgBar = document.getElementById('message');
+// max input notice
+function checkAmount() {
+  if(msgBar.value.length == 2000) {
+    alert("You have reached the maximum character limit (2000)");
+  } else if (msgBar.value.length != 2000) {
+    return false;    
+  }
+}
 // focus on page hide/show
 document.addEventListener("visibilitychange", onchange => {
-  document.getElementById('message').focus();
+  msgBar.focus();
 });
-
+function startFocus() {
+  msgBar.focus();
+};
 /* img inputload https://stackoverflow.com/questions/49201299/save-and-load-image-from-input/49202085 */
-
 function report() {
   if (window.confirm('before reporting an issue, make sure you have attempted to join a chat multiple times, at least'))
 {
