@@ -53,6 +53,15 @@
       width: 100%;
       cursor: pointer;
     }
+    .button:hover {
+      -webkit-box-shadow: 0px 0px 20px -5px rgba(0,0,0,0.57);
+      -moz-box-shadow: 0px 0px 20px -5px rgba(0,0,0,0.57);
+      box-shadow: 0px 0px 20px -5px rgba(0,0,0,0.57);
+      transition: 0.2s;
+    }
+    .button:not(:hover) {
+      transition: 0.2s;
+    }
     .input {
       -webkit-appearance: none;
       border: 3px solid var(--colour);
