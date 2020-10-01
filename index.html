@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link href="main.css" rel="stylesheet">
   </head>
-  <body>
+  <body onkeypress="startFocus()">
 </div>
     <div class="welcome">
       <div class="side create">
@@ -33,13 +33,13 @@
         <button class="button" id="join">join</button>
         <p class="error hidden" id="id-error"></p>
       </div>
-      <div class="footer">
+      <div class="footer" id="footer">
       <sub>unable to join chats? <font color="blue" onclick="report()" class="cursor"><u>click here</u></font>.</sub>
-    </div>
+      </div>
     </div>
 		<br><br>
     <div class="chat" id="chat"></div>
-    <input type="text" placeholder="send a message" id="message" autocomplete="off" maxlength="2000" disabled>
+    <input type="text" placeholder="send a message" id="message" autocomplete="off" maxlength="2000" onkeyup="checkAmount()" disabled>
     <script src="main.js"></script>
   </body>
 </html>
