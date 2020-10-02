@@ -248,9 +248,10 @@
     .footer {
        position: fixed;
        left: 0;
-       bottom: 0;
+       top: 0;
        width: 100%;
-       background-color: #eee;
+       height: 25px;
+       background-color: darkgrey;
        color: black;
        text-align: center;
        cursor: help;
