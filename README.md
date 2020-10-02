@@ -7,4 +7,4 @@ this is an 'anonymous' chat client, meaning it requires no authentication, no de
 
 ## how can i use this
 however you want. if you wish to use this, i recommend using the site linked (it is my version).
-> the original version can be found <a href="https://sheeptester.github.io/javascripts/anonchat.html">here</a>
+> the original base design can be found <a href="https://sheeptester.github.io/javascripts/anonchat.html">here</a>
