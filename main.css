@@ -244,15 +244,3 @@
     .cursor {
       cursor: pointer;
     }
-    /* footer taken from https://www.w3schools.com/howto/howto_css_fixed_footer.asp becasue i am a lazy shit */
-    .footer {
-       position: fixed;
-       left: 0;
-       top: 0;
-       width: 100%;
-       height: 25px;
-       background-color: darkgrey;
-       color: black;
-       text-align: center;
-       cursor: help;
-    }
