@@ -27,12 +27,6 @@ function startFocus() {
   msgBar.focus();
 };
 /* img inputload https://stackoverflow.com/questions/49201299/save-and-load-image-from-input/49202085 */
-function report() {
-  if (window.confirm('before reporting an issue, make sure you have attempted to join a chat multiple times, at least'))
-{
-  window.open("https://waa.ai/report", "_blank");
-  }
-};
 
 // main js
 const consonants = 'bdfghjklmnprstvwz';
