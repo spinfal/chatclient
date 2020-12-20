@@ -1,15 +1,19 @@
 // custom code
 function cuscode() {
 	var value = document.getElementById("custom-id").value;
-	if (document.getElementById("custom-id").value == "") {
+	if (document.getElementById("custom-id").value === "") {
 	  alert("Code cannot be empty.");
 	} else if (value.length <= 5) {
 	  alert("Code needs to be 6 letters or longer.");
 	} else {
 	  document.title = "creating..."; window.open("https://chatclient.spinfal.repl.co/?chat=" +  document.getElementById("custom-id").value, "_self");
 	}
-};
+}
 // kinda ghetto but eh :shrug:
+// server status link
+function servStat() {
+  window.open('https://waa.ai/serverStatus');
+}
 var msgBar = document.getElementById('message');
 // max input notice
 function checkAmount() {
@@ -25,8 +29,13 @@ document.addEventListener("visibilitychange", onchange => {
 });
 function startFocus() {
   msgBar.focus();
-};
-/* img inputload https://stackoverflow.com/questions/49201299/save-and-load-image-from-input/49202085 */
+}
+function report() {
+  if (window.confirm('before reporting an issue, make sure you have attempted to join a chat multiple times, at least'))
+{
+  window.open("https://waa.ai/report", "_blank");
+  }
+}
 
 // main js
 const consonants = 'bdfghjklmnprstvwz';
@@ -62,11 +71,10 @@ function createChat(on = {}, id = randomWord(), messages = [], userData = {}) {
       switch (data.type) {
         case 'new-message': {
           const msgObj = {type: 'message', content: data.content, author: peerID, time: data.time, data: data.data};
-          //  msgtime = "  " + "(" + new Date().toLocaleTimeString() + ")"
           messages.push(msgObj);
           broadcast({type: 'new-message', message: msgObj});
           if (on.message) on.message(msgObj);
-          document.getElementById('message').focus();
+          startFocus(); // only works for host it seems
           break;
         }
         case 'set-colour': {
@@ -108,12 +116,17 @@ function createChat(on = {}, id = randomWord(), messages = [], userData = {}) {
         announce(`${userData[conn.peer].name} left (id: ${conn.peer}).`);
         delete userData[conn.peer];
         broadcast({type: 'user-left', user: conn.peer});
+        peer.destroy();
       });
     }
     peer.on('open', () => {
       Object.keys(userData).forEach(peerID => {
         if (peerID === peer.id) return;
-        const conn = peer.connect(peerID);
+        const conn = peer.connect(peerID, {
+      host: 'pjsserver.spinfal.repl.co',
+      pingInterval: 5000,
+      debug: 2
+    });
         welcomeNewMember(conn);
       });
       peer.on('connection', welcomeNewMember);
@@ -122,7 +135,7 @@ function createChat(on = {}, id = randomWord(), messages = [], userData = {}) {
           receive(peer.id, {type: 'new-message', content: encodeURIComponent(msg), time: Date.now(), data: metadata});
         },
         setColour(colour) {
-          receive(peer.id, {type: 'set-colour', colour})
+          receive(peer.id, {type: 'set-colour', colour});
         },
         setName(name) {
           receive(peer.id, {type: 'set-name', name, time: Date.now()});
@@ -138,7 +151,11 @@ function createChat(on = {}, id = randomWord(), messages = [], userData = {}) {
 }
 function joinChat(id, on = {}) {
   return new Promise((res, rej) => {
-    const peer = new Peer();
+    const peer = new Peer({
+      host: 'pjsserver.spinfal.repl.co',
+      pingInterval: 5000,
+      debug: 2
+    });
     const obj = {id};
     let wasClosed = false, open = false;
     function treatConnection(conn) {
@@ -157,6 +174,7 @@ function joinChat(id, on = {}) {
           case 'new-message': {
             messages.push(data.message);
             if (on.message) on.message(data.message);
+            startFocus();
             break;
           }
           case 'set-user-data': {
@@ -172,6 +190,7 @@ function joinChat(id, on = {}) {
           }
           case 'user-left': {
             delete userData[data.user];
+            peer.destroy();
             break;
           }
         }
@@ -190,7 +209,11 @@ function joinChat(id, on = {}) {
       if (wasClosed && on.reopen) on.reopen();
     }
     peer.on('open', () => {
-      const conn = peer.connect(SPIN_PREFIX + id);
+      const conn = peer.connect(SPIN_PREFIX + id, {
+      host: 'pjsserver.spinfal.repl.co',
+      pingInterval: 5000,
+      debug: 2
+    });
       treatConnection(conn);
       conn.on('open', () => {
         res(obj);
@@ -277,8 +300,8 @@ async function launchChat(chatGetter) {
     timeSet.appendChild(timeDiv);
     timeSet.appendChild(timeData);
     message.appendChild(timeSet);
-    // new Date().toLocaleTimeString()
     return message;
+    startFocus();
   }
   function submitHandler(msg) {
     if (msg[0] === '/') {
@@ -385,6 +408,7 @@ async function launchChat(chatGetter) {
       }
     } else {
       obj.send(msg);
+      startFocus();
     }
   }
   const obj = await chatGetter({
@@ -494,6 +518,6 @@ if (params.get('chat')) {
 
 // reload or leave warning
 window.onbeforeunload = function() {
-   return "reloading or leaving this page may clear or disconnect your current chat";
+   return "reloading or leaving this page may clear or disconnect your current chat"
    //return;
 };
