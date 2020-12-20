@@ -15,7 +15,7 @@ function servStat() {
   window.open('https://waa.ai/serverStatus');
 }
 var msgBar = document.getElementById('message');
-// max input notice
+// max input notices
 function checkAmount() {
   if(msgBar.value.length == 2000) {
     alert("You have reached the maximum character limit (2000)");
