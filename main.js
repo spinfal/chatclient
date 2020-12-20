@@ -122,11 +122,7 @@ function createChat(on = {}, id = randomWord(), messages = [], userData = {}) {
     peer.on('open', () => {
       Object.keys(userData).forEach(peerID => {
         if (peerID === peer.id) return;
-        const conn = peer.connect(peerID, {
-      host: 'pjsserver.spinfal.repl.co',
-      pingInterval: 5000,
-      debug: 2
-    });
+        const conn = peer.connect(peerID);
         welcomeNewMember(conn);
       });
       peer.on('connection', welcomeNewMember);
