@@ -13,25 +13,27 @@
     <link href="main.css" rel="stylesheet">
   </head>
   <body onkeypress="startFocus()">
-</div>
     <div class="welcome">
       <div class="side create">
-        <h1>create a chat</h1>
+        <h1 id="mobile">create a chat</h1>
         <button class="button" id="create">create</button>
       </div>
       <div class="line"></div>
       <div class="side custom">
-      	<h1>custom chat code</h1>
+      	<h1 id="mobile">custom chat code</h1>
       	<div><input type="text" placeholder="custom ID" id="custom-id" class="input" maxlength="30"></div>
         <button class="button" id="custom" onclick="cuscode()">create</button>
-        <sub>Code must be 6 <font color="red">letters</font> or more.</sub>
+        <sub id="tip">Code must be 6 <font color="red">letters</font> or more.</sub>
       </div>
       <div class="line"></div>
       <div class="side join">
-        <h1>join a chat</h1>
+        <h1 id="mobile">join a chat</h1>
         <div><input type="text" placeholder="chat ID" id="join-id" class="input"></div>
         <button class="button" id="join">join</button>
         <p class="error hidden" id="id-error"></p>
+      </div>
+      <div class="footer" id="footer">
+      <sub id="tip">Issues with PeerJS may have been resolved. <font color="blue" onclick="servStat()" class="cursor">Check the server status</font>.</sub>
       </div>
     </div>
 		<br><br>
