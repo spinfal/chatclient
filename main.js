@@ -126,6 +126,7 @@ function createChat(on = {}, id = randomWord(), messages = [], userData = {}) {
         welcomeNewMember(conn);
       });
       peer.on('connection', welcomeNewMember);
+      peer.on('disconnected', function() { peer.destroy(); console.log('peer forfeited'); });
       res({
         send(msg, metadata) {
           receive(peer.id, {type: 'new-message', content: encodeURIComponent(msg), time: Date.now(), data: metadata});
@@ -147,11 +148,7 @@ function createChat(on = {}, id = randomWord(), messages = [], userData = {}) {
 }
 function joinChat(id, on = {}) {
   return new Promise((res, rej) => {
-    const peer = new Peer({
-      host: 'pjsserver.spinfal.repl.co',
-      pingInterval: 5000,
-      debug: 2
-    });
+    const peer = new Peer();
     const obj = {id};
     let wasClosed = false, open = false;
     function treatConnection(conn) {
@@ -205,11 +202,7 @@ function joinChat(id, on = {}) {
       if (wasClosed && on.reopen) on.reopen();
     }
     peer.on('open', () => {
-      const conn = peer.connect(SPIN_PREFIX + id, {
-      host: 'pjsserver.spinfal.repl.co',
-      pingInterval: 5000,
-      debug: 2
-    });
+      const conn = peer.connect(SPIN_PREFIX + id);
       treatConnection(conn);
       conn.on('open', () => {
         res(obj);
@@ -316,6 +309,7 @@ async function launchChat(chatGetter) {
               + '/under [message] - Underlines your message\n'
               + '/rejoin - Rejoins the current chat\n'
               + '/new [room name] - Makes a new chat room for you (alias: /newroom)\n'
+              + '/leave - Leaves the chat room\n'
               + '/tableflip - Sends the tableflip unicode emote\n'
               + '/unflip - Sends the un-tableflip unicode emote\n'
               + '/shrug - Sends the shrug unicode emote');
@@ -358,6 +352,12 @@ async function launchChat(chatGetter) {
 		  			}
 		  			break;
           }
+          case 'leave': {
+		  			selfPost('leaving...');
+		  			document.title = "leaving chat...";
+            window.location.href = "/";
+            break;
+		  		}
           case 'tableflip': {
             obj.send("(╯°□°)╯︵ ┻━┻");
             break;
@@ -424,6 +424,7 @@ async function launchChat(chatGetter) {
       onsubmit = null;
       messageInput.disabled = true;
       chat.appendChild(hostClosedMessage);
+      alert('this chatroom has closed.')
     },
     reopen() {
       onsubmit = submitHandler;

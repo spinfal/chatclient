@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link href="main.css" rel="stylesheet">
   </head>
-  <body onkeypress="startFocus()">
+  <body onkeypress="startFocus()" id="body">
     <div class="welcome">
       <div class="side create">
         <h1 id="mobile">create a chat</h1>
@@ -40,5 +40,11 @@
     <div class="chat" id="chat"></div>
     <input type="text" placeholder="send a message" id="message" autocomplete="off" maxlength="2000" onkeyup="checkAmount()" disabled>
     <script src="main.js"></script>
+    <script>
+      if (location.protocol !== 'https:') {
+        document.getElementById('body').innerHTML = "redirecting to HTTPS...";
+        location.replace(`https:${location.href.substring(location.protocol.length)}`);
+      }
+    </script>
   </body>
 </html>
