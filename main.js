@@ -442,8 +442,8 @@ async function launchChat(chatGetter) {
             break;
           }
           case 'leave': {
-		  			selfPost('leaving...');
-		  			document.title = "leaving chat...";
+            selfPost('leaving...');
+            document.title = "leaving chat...";
             window.location.href = "/";
             break;
 		  		}
