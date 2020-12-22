@@ -430,16 +430,16 @@ async function launchChat(chatGetter) {
             break;
 		  		}
           case 'new': case 'newroom': {
-		  			roomName = msg.slice(1 + command.length + 1);
-		  			if (roomName.length <= 6) {
-		  				selfPost('room name needs to be 6 letters or more, (when using this command)');
-		  			} else {
-		  				selfPost('making new room...');
-		  			  document.title = "joining new room...";
-              window.open("?chat=" + roomName, "_self");
-              break;
-		  			}
-		  			break;
+            roomName = msg.slice(1 + command.length + 1);
+            if (roomName.length <= 6) {
+              selfPost('room name needs to be 6 letters or more, (when using this command)');
+              } else {
+                selfPost('making new room...');
+                document.title = "joining new room...";
+                window.open("?chat=" + roomName, "_self");
+                break;
+              }
+            break;
           }
           case 'leave': {
 		  			selfPost('leaving...');
