@@ -1,15 +1,5 @@
-// custom code
-function cuscode() {
-	var value = document.getElementById("custom-id").value;
-	if (document.getElementById("custom-id").value === "") {
-	  alert("Code cannot be empty.");
-	} else if (value.length <= 5) {
-	  alert("Code needs to be 6 letters or longer.");
-	} else {
-	  document.title = "creating..."; window.open("https://chatclient.spinfal.repl.co/?chat=" +  document.getElementById("custom-id").value, "_self");
-	}
-}
 // kinda ghetto but eh :shrug:
+
 // server status link
 function servStat() {
   window.open('https://waa.ai/serverStatus');
@@ -29,12 +19,6 @@ document.addEventListener("visibilitychange", onchange => {
 });
 function startFocus() {
   msgBar.focus();
-}
-function report() {
-  if (window.confirm('before reporting an issue, make sure you have attempted to join a chat multiple times, at least'))
-{
-  window.open("https://waa.ai/report", "_blank");
-  }
 }
 
 // main js
@@ -57,7 +41,13 @@ function createChat(on = {}, id = randomWord(), messages = [], userData = {}) {
   return new Promise((res, rej) => {
     const peer = new Peer(SPIN_PREFIX + id);
     const members = []; // list of connections
-    if (!userData[peer.id]) userData[peer.id] = {colour: '#ffffff', name: randomWord()};
+    var getName;
+    if (document.getElementById('c-custom-name').value==="") {
+      getName = randomWord();
+      } else if (document.getElementById('c-custom-name').value!=="") {
+        getName = document.getElementById('c-custom-name').value;
+      }
+    if (!userData[peer.id]) userData[peer.id] = {colour: '#ffffff', name: getName};
     function broadcast(msg) {
       members.forEach(conn => conn.send(msg));
     }
@@ -102,6 +92,105 @@ function createChat(on = {}, id = randomWord(), messages = [], userData = {}) {
         if (data.type === 'welcomed' && unwelcomed) {
           if (!userData[conn.peer]) {
             const name = randomWord();
+            userData[conn.peer] = {colour: '#ffffff', name};
+            broadcast({type: 'set-user-data', user: conn.peer, colour: '#ffffff', name});
+            if (on.coloursUpdate) on.coloursUpdate(conn.peer);
+          }
+          announce(`${userData[conn.peer].name} joined (id: ${conn.peer}).`);
+          unwelcomed = false;
+        } else receive(conn.peer, data);
+      });
+      conn.on('close', () => {
+        const index = members.indexOf(conn);
+        if (~index) members.splice(index, 1);
+        announce(`${userData[conn.peer].name} left (id: ${conn.peer}).`);
+        delete userData[conn.peer];
+        broadcast({type: 'user-left', user: conn.peer});
+        peer.destroy();
+      });
+    }
+    peer.on('open', () => {
+      Object.keys(userData).forEach(peerID => {
+        if (peerID === peer.id) return;
+        const conn = peer.connect(peerID);
+        welcomeNewMember(conn);
+      });
+      peer.on('connection', welcomeNewMember);
+      peer.on('disconnected', function() { peer.destroy(); console.log('peer forfeited'); });
+      res({
+        send(msg, metadata) {
+          receive(peer.id, {type: 'new-message', content: encodeURIComponent(msg), time: Date.now(), data: metadata});
+        },
+        setColour(colour) {
+          receive(peer.id, {type: 'set-colour', colour});
+        },
+        setName(name) {
+          receive(peer.id, {type: 'set-name', name, time: Date.now()});
+        },
+        id,
+        myID: peer.id
+      });
+      if (on.initialize) on.initialize(messages, userData);
+      announce(`the chatroom ID is ${id}; share this with other people so they can join!`);
+    });
+    peer.on('error', rej);
+  });
+}
+function customChat(on = {}, id = document.getElementById('custom-id').value, messages = [], userData = {}) {
+  return new Promise((res, rej) => {
+    const peer = new Peer(SPIN_PREFIX + id);
+    const members = []; // list of connections
+    var getName;
+    if (document.getElementById('custom-name').value==="") {
+      getName = randomWord();
+      } else if (document.getElementById('custom-name').value!=="") {
+        getName = document.getElementById('custom-name').value;
+      }
+    if (!userData[peer.id]) userData[peer.id] = {colour: '#ffffff', name: getName};
+    function broadcast(msg) {
+      members.forEach(conn => conn.send(msg));
+    }
+    function announce(msg, time = Date.now()) {
+      const msgObj = {type: 'announcement', content: encodeURIComponent(msg), time};
+      messages.push(msgObj);
+      broadcast({type: 'new-message', message: msgObj});
+      if (on.message) on.message(msgObj);
+    }
+    function receive(peerID, data) {
+      switch (data.type) {
+        case 'new-message': {
+          const msgObj = {type: 'message', content: data.content, author: peerID, time: data.time, data: data.data};
+          messages.push(msgObj);
+          broadcast({type: 'new-message', message: msgObj});
+          if (on.message) on.message(msgObj);
+          startFocus(); // only works for host it seems
+          break;
+        }
+        case 'set-colour': {
+          userData[peerID].colour = data.colour;
+          broadcast({type: 'set-user-data', user: peerID, colour: data.colour});
+          if (on.coloursUpdate) on.coloursUpdate(peerID);
+          break;
+        }
+        case 'set-name': {
+          const oldName = userData[peerID].name;
+          userData[peerID].name = data.name;
+          broadcast({type: 'set-user-data', user: peerID, name: data.name});
+          announce(`${oldName} set their name to ${data.name} (id: ${peerID}).`);
+          break;
+        }
+      }
+    }
+    function welcomeNewMember(conn) {
+      members.push(conn);
+      let unwelcomed = true;
+      conn.on('open', () => {
+        conn.send({type: 'welcome', messages, userData});
+      });
+      conn.on('data', data => {
+        if (data.type === 'welcomed' && unwelcomed) {
+          if (!userData[conn.peer]) {
+            const name = document.getElementById('custom-id').value;
             userData[conn.peer] = {colour: '#ffffff', name};
             broadcast({type: 'set-user-data', user: conn.peer, colour: '#ffffff', name});
             if (on.coloursUpdate) on.coloursUpdate(conn.peer);
@@ -342,8 +431,8 @@ async function launchChat(chatGetter) {
 		  		}
           case 'new': case 'newroom': {
 		  			roomName = msg.slice(1 + command.length + 1);
-		  			if (roomName.length <= 5) {
-		  				selfPost('room names must be 6 letters or more.');
+		  			if (roomName.length <= 6) {
+		  				selfPost('room name needs to be 6 letters or more, (when using this command)');
 		  			} else {
 		  				selfPost('making new room...');
 		  			  document.title = "joining new room...";
@@ -353,11 +442,11 @@ async function launchChat(chatGetter) {
 		  			break;
           }
           case 'leave': {
-            selfPost('leaving...');
-            document.title = "leaving chat...";
+		  			selfPost('leaving...');
+		  			document.title = "leaving chat...";
             window.location.href = "/";
             break;
-          }
+		  		}
           case 'tableflip': {
             obj.send("(╯°□°)╯︵ ┻━┻");
             break;
@@ -474,6 +563,14 @@ async function launchChat(chatGetter) {
 }
 document.getElementById('create').addEventListener('click', e => {
   launchChat(listeners => createChat(listeners))
+    .catch(err => {
+      document.body.classList.remove('chat-mode');
+      window.history.pushState({}, '', window.location.pathname);
+      console.log(err);
+    });
+});
+document.getElementById('custom').addEventListener('click', e => {
+  launchChat(listeners => customChat(listeners))
     .catch(err => {
       document.body.classList.remove('chat-mode');
       window.history.pushState({}, '', window.location.pathname);

@@ -25,7 +25,7 @@
       #tip {
         font-size: small;
       }
-      #custom-id, #join-id {
+      #custom-id, #join-id, #custom-name, #c-custom-name {
         font-size: small;
         height: 30px;
       }
